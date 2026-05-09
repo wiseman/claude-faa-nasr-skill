@@ -24,9 +24,9 @@ generate three GeoParquet sidecars with `ogr2ogr`.
 
 Supported platforms: macOS (Apple Silicon or Intel), Debian/Ubuntu, WSL.
 
-The `setup.sh` step below will download the latest NASR dataset and
-build the databases automatically. This uses about 250 MB of disk space
-and takes a few minutes to run.
+The `setup.sh` step below will download the latest NASR dataset into
+`$HOME/data/faa/nasr` and build the databases automatically. This uses
+about 250 MB of disk space and takes a few minutes to run.
 
 ```bash
 git clone https://github.com/wiseman/claude-faa-nasr-skill ~/code/claude-faa-nasr-skill
