@@ -1,8 +1,8 @@
 # claude-faa-nasr-skill
 
-A [Claude Code skill](https://docs.claude.com/en/docs/claude-code/skills)
-for querying the FAA's NASR (National Airspace System Resources) 28-day
-subscription data. Once installed, Claude knows how to:
+An [agent skill](https://agentskills.io) for querying the FAA's NASR
+(National Airspace System Resources) 28-day subscription data. Once
+installed, the agent can:
 
 - Look up airports, runways, navaids, fixes, airways, ILS, ATC
   frequencies, obstacles
@@ -30,24 +30,22 @@ cd ~/code/claude-faa-nasr-skill
 
 # install prereqs, clone build tool, install Perl deps, run first build, run doctor
 ./scripts/setup.sh --all
-
-# wire up to Claude Code
-mkdir -p ~/.claude/skills
-ln -s ~/code/claude-faa-nasr-skill ~/.claude/skills/faa-nasr
 ```
 
-`./scripts/setup.sh --all` is idempotent — re-running it skips
-already-installed packages and won't re-clone the build tool.
-
-If a phase fails or you want to re-run a single phase:
+Then symlink the skill into whichever agent you use:
 
 ```bash
-./scripts/setup.sh --prereqs              # OS packages only
-./scripts/setup.sh --clone-build-tool     # clone wiseman/processFaaData
-./scripts/setup.sh --perl-deps            # cpanm into local/
-./scripts/setup.sh --build                # fetch + build current cycle (~5 min, ~250 MB)
-./scripts/setup.sh --doctor               # health check
+# Claude Code
+mkdir -p ~/.claude/skills
+ln -s ~/code/claude-faa-nasr-skill ~/.claude/skills/faa-nasr
+
+# OpenAI Codex CLI
+mkdir -p ~/.agents/skills
+ln -s ~/code/claude-faa-nasr-skill ~/.agents/skills/faa-nasr
 ```
+
+`./scripts/setup.sh --all` is idempotent. Run `./scripts/setup.sh
+--help` for individual phases if you need to re-run just one.
 
 To rebuild later cycles (FAA publishes a new one every 28 days):
 
@@ -143,7 +141,7 @@ scripts/load-config.sh         # source this to populate env vars
 config.sh.example              # template config file
 ```
 
-After install, ask Claude things like:
+After install, ask the agent things like:
 
 - "How many distinct ATC frequencies are within 25 NM of LAX?"
 - "Which airports above 6,000 ft elevation have an ILS approach?"
