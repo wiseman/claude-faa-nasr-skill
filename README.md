@@ -84,15 +84,23 @@ $ claude
          15,000+     33   0.1%
 
   Notes:
-  - Source: APT_RWY.runway_physical_runway_length_nearest_foot, all 50 states + DC + U.S. territories (PR, GU, VI, AS, MP, Wake, Midway, Palmyra). 1,000-ft
-  bins.
-  - The 0-999 / 2-3k spikes are dominated by seaplane water lanes, helipads-marked-as-runways, and short turf strips — many "runways" in NASR aren't paved.
-  - 15,000+ bin is mostly seaplane lanes on big lakes; the longest paved runways are DEN 16R/34L, EDW, VBG, and KSC's shuttle landing facility (all ~15-16k
-  ft).
+
+  - Source: APT_RWY.runway_physical_runway_length_nearest_foot, all 50
+    states + DC + U.S. territories (PR, GU, VI, AS, MP, Wake, Midway,
+    Palmyra). 1,000-ft bins.
+
+  - The 0-999 / 2-3k spikes are dominated by seaplane water lanes,
+    helipads-marked-as-runways, and short turf strips — many "runways"
+    in NASR aren't paved.
+
+  - 15,000+ bin is mostly seaplane lanes on big lakes; the longest
+    paved runways are DEN 16R/34L, EDW, VBG, and KSC's shuttle landing
+    facility (all ~15-16k ft).
 
 ❯ how many different tower frequencies does LAX have?
 
-⏺ LAX has 5 distinct tower (local control) frequencies in NASR — 3 VHF and 2 UHF military duplicates:
+⏺ LAX has 5 distinct tower (local control) frequencies in NASR — 3 VHF
+  and 2 UHF military duplicates:
 
   ┌───────────────────┬──────────────────────────────────┐
   │       Freq        │              Sector              │
@@ -108,10 +116,14 @@ $ claude
   │ 379.100 MHz (UHF) │ South Complex                    │
   └───────────────────┴──────────────────────────────────┘
 
-  If you mean "all frequencies at the LAX tower facility" (i.e. everything in TWR_TWR3, including ground, clearance delivery, D-ATIS, ramp control,
-  emergency, ops), it's 22 distinct frequencies across 3 record rows: tower x5, ground x4 (121.4 / 121.65 / 121.75 / 327.0 UHF), clearance delivery x2
-  (120.35 / 327.0 — same UHF as ground), D-ATIS x2 (133.80 arr / 135.65 dep), 5 ramp control freqs (129.4, 129.5, 130.5, 130.85, 131.45), SFRA 128.55,
-  emergency 121.5/243.0, and ops 372.2.
+  If you mean "all frequencies at the LAX tower facility"
+  (i.e. everything in TWR_TWR3, including ground, clearance delivery,
+  D-ATIS, ramp control, emergency, ops), it's 22 distinct frequencies
+  across 3 record rows: tower x5, ground x4 (121.4 / 121.65 / 121.75 /
+  327.0 UHF), clearance delivery x2 (120.35 / 327.0 — same UHF as
+  ground), D-ATIS x2 (133.80 arr / 135.65 dep), 5 ramp control freqs
+  (129.4, 129.5, 130.5, 130.85, 131.45), SFRA 128.55, emergency
+  121.5/243.0, and ops 372.2.
 
   Source: TWR_TWR3 rows where master_record_row_id=484 (LAX).
 
@@ -143,8 +155,9 @@ $ claude
   - LOC unusable within 0.6 NM
   - Autopilot-coupled approach NA below 1509 ft MSL
 
-  That's the only ILS in NASR for VNY. Other published approaches at VNY (RNAV/GPS, VOR, LOC-only variants on 16R) live in CIFP/d-TPP and aren't in this
-  database.
+  That's the only ILS in NASR for VNY. Other published approaches at
+  VNY (RNAV/GPS, VOR, LOC-only variants on 16R) live in CIFP/d-TPP and
+  aren't in this database.
 ```
 
 ## Prerequisites
