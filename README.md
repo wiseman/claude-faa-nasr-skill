@@ -116,8 +116,8 @@ $ claude
   │ 379.100 MHz (UHF) │ South Complex                    │
   └───────────────────┴──────────────────────────────────┘
 
-  If you mean "all frequencies at the LAX tower facility"
-  (i.e. everything in TWR_TWR3, including ground, clearance delivery,
+  If you mean "all frequencies at the LAX tower facility" (i.e.
+  everything in TWR_TWR3, including ground, clearance delivery,
   D-ATIS, ramp control, emergency, ops), it's 22 distinct frequencies
   across 3 record rows: tower x5, ground x4 (121.4 / 121.65 / 121.75 /
   327.0 UHF), clearance delivery x2 (120.35 / 327.0 — same UHF as
