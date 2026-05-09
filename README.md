@@ -53,6 +53,100 @@ To rebuild later cycles (FAA publishes a new one every 28 days):
 ./scripts/refresh.sh
 ```
 
+Then use the skill:
+
+```
+$ claude
+❯ Create an ASCII histogram of runway lengths in the U.S.
+
+⏺ Skill(faa-nasr)
+  ⎿  Successfully loaded skill
+
+⏺ U.S. runway lengths (n=23,221, FAA NASR cycle 2026-04-16)
+
+     length (ft)  count          %
+  --------------------------------------------------------------------------------
+           0-999  6,650  ################################################## 28.6%
+     1,000-1,999  3,157  ######################## 13.6%
+     2,000-2,999  5,350  ######################################## 23.0%
+     3,000-3,999  3,037  ####################### 13.1%
+     4,000-4,999  1,709  ############# 7.4%
+     5,000-5,999  1,561  ############ 6.7%
+     6,000-6,999    610  ##### 2.6%
+     7,000-7,999    327  ## 1.4%
+     8,000-8,999    263  ## 1.1%
+     9,000-9,999    152  # 0.7%
+   10,000-10,999    196  # 0.8%
+   11,000-11,999     73  # 0.3%
+   12,000-12,999     65   0.3%
+   13,000-13,999     31   0.1%
+   14,000-14,999      7   0.0%
+         15,000+     33   0.1%
+
+  Notes:
+  - Source: APT_RWY.runway_physical_runway_length_nearest_foot, all 50 states + DC + U.S. territories (PR, GU, VI, AS, MP, Wake, Midway, Palmyra). 1,000-ft
+  bins.
+  - The 0-999 / 2-3k spikes are dominated by seaplane water lanes, helipads-marked-as-runways, and short turf strips — many "runways" in NASR aren't paved.
+  - 15,000+ bin is mostly seaplane lanes on big lakes; the longest paved runways are DEN 16R/34L, EDW, VBG, and KSC's shuttle landing facility (all ~15-16k
+  ft).
+
+❯ how many different tower frequencies does LAX have?
+
+⏺ LAX has 5 distinct tower (local control) frequencies in NASR — 3 VHF and 2 UHF military duplicates:
+
+  ┌───────────────────┬──────────────────────────────────┐
+  │       Freq        │              Sector              │
+  ├───────────────────┼──────────────────────────────────┤
+  │ 119.800 MHz       │ Helicopters                      │
+  ├───────────────────┼──────────────────────────────────┤
+  │ 120.950 MHz       │ South Complex (rwys 25L/R, 7L/R) │
+  ├───────────────────┼──────────────────────────────────┤
+  │ 133.900 MHz       │ North Complex (rwys 24L/R, 6L/R) │
+  ├───────────────────┼──────────────────────────────────┤
+  │ 239.300 MHz (UHF) │ North Complex & helicopters      │
+  ├───────────────────┼──────────────────────────────────┤
+  │ 379.100 MHz (UHF) │ South Complex                    │
+  └───────────────────┴──────────────────────────────────┘
+
+  If you mean "all frequencies at the LAX tower facility" (i.e. everything in TWR_TWR3, including ground, clearance delivery, D-ATIS, ramp control,
+  emergency, ops), it's 22 distinct frequencies across 3 record rows: tower x5, ground x4 (121.4 / 121.65 / 121.75 / 327.0 UHF), clearance delivery x2
+  (120.35 / 327.0 — same UHF as ground), D-ATIS x2 (133.80 arr / 135.65 dep), 5 ramp control freqs (129.4, 129.5, 130.5, 130.85, 131.45), SFRA 128.55,
+  emergency 121.5/243.0, and ops 372.2.
+
+  Source: TWR_TWR3 rows where master_record_row_id=484 (LAX).
+
+❯ What are VNY's ILS approaches?
+
+⏺ VNY has one ILS approach: ILS Rwy 16R.
+
+  ┌─────────────────┬────────────────────────────────────────────┐
+  │      Field      │                   Value                    │
+  ├─────────────────┼────────────────────────────────────────────┤
+  │ Type / Cat      │ ILS, Cat I                                 │
+  ├─────────────────┼────────────────────────────────────────────┤
+  │ Ident           │ I-VNY                                      │
+  ├─────────────────┼────────────────────────────────────────────┤
+  │ Localizer freq  │ 111.3 MHz (status: OPERATIONAL RESTRICTED) │
+  ├─────────────────┼────────────────────────────────────────────┤
+  │ Glideslope      │ 332.3 MHz, 3.5° angle (OPERATIONAL IFR)    │
+  ├─────────────────┼────────────────────────────────────────────┤
+  │ Approach course │ 163.51° magnetic                           │
+  ├─────────────────┼────────────────────────────────────────────┤
+  │ Outer marker    │ KADIE (decommissioned, 2016-06-14)         │
+  ├─────────────────┼────────────────────────────────────────────┤
+  │ Middle marker   │ decommissioned 2015-11-13                  │
+  └─────────────────┴────────────────────────────────────────────┘
+
+  Notable remarks from ILS_ILS6:
+  - ILS unmonitored when ATCT closed
+  - ILS classification code IA
+  - LOC unusable within 0.6 NM
+  - Autopilot-coupled approach NA below 1509 ft MSL
+
+  That's the only ILS in NASR for VNY. Other published approaches at VNY (RNAV/GPS, VOR, LOC-only variants on 16R) live in CIFP/d-TPP and aren't in this
+  database.
+```
+
 ## Prerequisites
 
 `./scripts/setup.sh` installs everything below. This table is
