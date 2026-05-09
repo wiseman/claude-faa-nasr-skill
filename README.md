@@ -55,25 +55,25 @@ To rebuild later cycles (FAA publishes a new one every 28 days):
 
 ## Prerequisites
 
-`./scripts/setup.sh --prereqs` installs everything below. This table is
+`./scripts/setup.sh` installs everything below. This table is
 the fallback for unsupported platforms or when you'd rather install by
 hand.
 
-| Tool | Purpose | macOS (Homebrew) | Debian/Ubuntu/WSL |
-|---|---|---|---|
-| Perl 5.34+ + cpanm | NASR-to-SQLite converter | `brew install perl cpanminus` | `sudo apt install perl cpanminus` |
-| sqlite3 with `load_extension` | Apple's stock build omits it | `brew install sqlite` | `sudo apt install sqlite3` (already supports load_extension) |
-| libspatialite + tools | SQLite spatial extensions | `brew install libspatialite spatialite-tools` | `sudo apt install libsqlite3-mod-spatialite spatialite-bin` |
-| GDAL | `ogr2ogr` for spatial conversions | `brew install gdal` (ships with the Parquet driver) | `sudo apt install gdal-bin python3-gdal` (apt build lacks the Parquet driver — see below) |
-| `uv` | Required on Linux only, runs the Python GeoParquet fallback for the sidecar build | not needed on macOS (Homebrew GDAL handles Parquet) | `wget -qO- https://astral.sh/uv/install.sh \| sh` |
-| DuckDB with spatial + parquet | Cross-format queries | `brew install duckdb` | Install from <https://duckdb.org> (apt lags; setup.sh fetches the official binary) |
-| `wget` | Download FAA subscription | `brew install wget` | `sudo apt install wget` |
+| Tool                          | Purpose                                                                           | macOS (Homebrew)                                    | Debian/Ubuntu/WSL                                                                         |
+| ----------------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Perl 5.34+ + cpanm            | NASR-to-SQLite converter                                                          | `brew install perl cpanminus`                       | `sudo apt install perl cpanminus`                                                         |
+| sqlite3 with `load_extension` | Apple's stock build omits it                                                      | `brew install sqlite`                               | `sudo apt install sqlite3` (already supports load_extension)                              |
+| libspatialite + tools         | SQLite spatial extensions                                                         | `brew install libspatialite spatialite-tools`       | `sudo apt install libsqlite3-mod-spatialite spatialite-bin`                               |
+| GDAL                          | `ogr2ogr` for spatial conversions                                                 | `brew install gdal` (ships with the Parquet driver) | `sudo apt install gdal-bin python3-gdal` (apt build lacks the Parquet driver — see below) |
+| `uv`                          | Required on Linux only, runs the Python GeoParquet fallback for the sidecar build | not needed on macOS (Homebrew GDAL handles Parquet) | `wget -qO- https://astral.sh/uv/install.sh \| sh`                                         |
+| DuckDB with spatial + parquet | Cross-format queries                                                              | `brew install duckdb`                               | Install from <https://duckdb.org> (apt lags; setup.sh fetches the official binary)        |
+| `wget`                        | Download FAA subscription                                                         | `brew install wget`                                 | `sudo apt install wget`                                                                   |
 
 **Note on GDAL+Parquet on Linux/WSL:** Ubuntu 24.04's stock `gdal-bin`
 does not include the Parquet driver. `scripts/refresh.sh` detects this
 and falls back to `scripts/build-parquet-sidecars.py`, which uses
 `pyogrio` (bundles its own GDAL with Parquet support) under `uv`.
-`setup.sh --prereqs` installs `uv` automatically on Linux.
+`setup.sh` installs `uv` automatically on Linux.
 
 For details, including the full manual build recipe, see
 [`references/manual-build.md`](references/manual-build.md).
@@ -84,8 +84,7 @@ The upstream repo is somewhat dormant and has bugs that prevent the
 build from succeeding on macOS Tahoe / GDAL 3.12 / SpatiaLite 5. Until
 [jlmcgraw/processFaaData#17](https://github.com/jlmcgraw/processFaaData/pull/17)
 merges, the build needs the patched fork at
-<https://github.com/wiseman/processFaaData>. `setup.sh
---clone-build-tool` clones the fork on the right branch
+<https://github.com/wiseman/processFaaData>. `setup.sh` clones the fork on the right branch
 automatically; if you already have an upstream clone, it adds the
 fork as a remote and fast-forward-merges the patches.
 
@@ -103,13 +102,13 @@ wins):
 4. `${XDG_CONFIG_HOME:-~/.config}/faa-nasr-skill/config.sh`
 5. Built-in defaults
 
-| Variable | Default | What |
-|---|---|---|
-| `NASR_DATA_DIR` | `~/data/faa/nasr` | Where built sqlite + parquet + `CYCLE.txt` live |
-| `PROCESS_FAA_DATA_DIR` | `~/src/processFaaData` | Clone of the build tool |
-| `ADSB_PARQUET_DIR` | (unset) | Optional. Set if you have an ADS-B parquet archive for cross-format joins |
-| `SQLITE_BIN` | auto-detected | sqlite3 binary supporting `.load mod_spatialite` |
-| `MOD_SPATIALITE_PATH` | auto-detected | Full path to the SpatiaLite shared library |
+| Variable               | Default                | What                                                                      |
+| ---------------------- | ---------------------- | ------------------------------------------------------------------------- |
+| `NASR_DATA_DIR`        | `~/data/faa/nasr`      | Where built sqlite + parquet + `CYCLE.txt` live                           |
+| `PROCESS_FAA_DATA_DIR` | `~/src/processFaaData` | Clone of the build tool                                                   |
+| `ADSB_PARQUET_DIR`     | (unset)                | Optional. Set if you have an ADS-B parquet archive for cross-format joins |
+| `SQLITE_BIN`           | auto-detected          | sqlite3 binary supporting `.load mod_spatialite`                          |
+| `MOD_SPATIALITE_PATH`  | auto-detected          | Full path to the SpatiaLite shared library                                |
 
 To populate the variables in your shell:
 
