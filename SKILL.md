@@ -22,13 +22,13 @@ defaults below. Source `scripts/load-config.sh` before running shell
 commands to populate them; or run `scripts/doctor.sh --paths` to see
 what they currently resolve to.
 
-| Variable | Default | What |
-|---|---|---|
-| `NASR_DATA_DIR` | `~/data/faa/nasr` | Built sqlite + parquet + `CYCLE.txt` |
-| `PROCESS_FAA_DATA_DIR` | `~/src/processFaaData` | Clone of the build tool |
-| `ADSB_PARQUET_DIR` | (unset) | Optional: ADS-B parquet archive for cross-format joins |
-| `SQLITE_BIN` | auto-detected | sqlite3 binary that supports `.load mod_spatialite` |
-| `MOD_SPATIALITE_PATH` | auto-detected | Full path to the SpatiaLite shared library |
+| Variable               | Default                | What                                                   |
+| ---------------------- | ---------------------- | ------------------------------------------------------ |
+| `NASR_DATA_DIR`        | `~/data/faa/nasr`      | Built sqlite + parquet + `CYCLE.txt`                   |
+| `PROCESS_FAA_DATA_DIR` | `~/src/processFaaData` | Clone of the build tool                                |
+| `ADSB_PARQUET_DIR`     | (unset)                | Optional: ADS-B parquet archive for cross-format joins |
+| `SQLITE_BIN`           | auto-detected          | sqlite3 binary that supports `.load mod_spatialite`    |
+| `MOD_SPATIALITE_PATH`  | auto-detected          | Full path to the SpatiaLite shared library             |
 
 Override via env vars or by editing `config.sh` (template:
 `config.sh.example`). The user's `README.md` documents the discovery
@@ -38,17 +38,17 @@ order.
 
 All under `$NASR_DATA_DIR`:
 
-| File | Contents | When to use |
-| --- | --- | --- |
-| `nasr.sqlite` | Plain SQLite, ~70 NASR tables (APT, NAV, FIX, AWY, ILS, TWR, COM, FSS, AWOS, OBSTACLE, MTR, ARB, …). No geometry. | Attribute lookups, joins between subject tables. |
-| `spatialite_nasr.sqlite` | Same tables, SpatiaLite-wrapped with `GEOMETRY` columns and R-tree indexes on the locatable layers. | Geographic queries (`ST_Within`, nearest, bbox). |
-| `controlled_airspace_spatialite.sqlite` | Single layer `Class_Airspace` (B/C/D/E shelves as `MULTIPOLYGON`). | Class B/C/D/E geometry & altitudes. |
-| `special_use_airspace_spatialite.sqlite` | AIXM-style: `Airspace`, `AirspaceUsage`, `AirTrafficControlService`, … | Restricted, Prohibited, MOA, Warning, Alert, ATCAA. |
-| `class_airspace.parquet` | GeoParquet sidecar of `Class_Airspace`. | DuckDB joins (no SpatiaLite-blob friction). |
-| `special_use_airspace.parquet` | GeoParquet sidecar of SUA `Airspace`. | DuckDB joins. |
-| `obstacle.parquet` | GeoParquet sidecar of `OBSTACLE_OBSTACLE` (~530k rows). | Bulk obstacle queries / wide aggregations. |
-| `CYCLE.txt` | Marker file recording the cycle date (e.g. `2026-04-16`). | Read first to know how stale the data is. |
-| `28DaySubscription_Effective_<DATE>.zip` + unpacked dir | Source of last build; kept for auditability. | Don't query directly. |
+| File                                                    | Contents                                                                                                          | When to use                                         |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `nasr.sqlite`                                           | Plain SQLite, ~70 NASR tables (APT, NAV, FIX, AWY, ILS, TWR, COM, FSS, AWOS, OBSTACLE, MTR, ARB, …). No geometry. | Attribute lookups, joins between subject tables.    |
+| `spatialite_nasr.sqlite`                                | Same tables, SpatiaLite-wrapped with `GEOMETRY` columns and R-tree indexes on the locatable layers.               | Geographic queries (`ST_Within`, nearest, bbox).    |
+| `controlled_airspace_spatialite.sqlite`                 | Single layer `Class_Airspace` (B/C/D/E shelves as `MULTIPOLYGON`).                                                | Class B/C/D/E geometry & altitudes.                 |
+| `special_use_airspace_spatialite.sqlite`                | AIXM-style: `Airspace`, `AirspaceUsage`, `AirTrafficControlService`, …                                            | Restricted, Prohibited, MOA, Warning, Alert, ATCAA. |
+| `class_airspace.parquet`                                | GeoParquet sidecar of `Class_Airspace`.                                                                           | DuckDB joins (no SpatiaLite-blob friction).         |
+| `special_use_airspace.parquet`                          | GeoParquet sidecar of SUA `Airspace`.                                                                             | DuckDB joins.                                       |
+| `obstacle.parquet`                                      | GeoParquet sidecar of `OBSTACLE_OBSTACLE` (~530k rows).                                                           | Bulk obstacle queries / wide aggregations.          |
+| `CYCLE.txt`                                             | Marker file recording the cycle date (e.g. `2026-04-16`).                                                         | Read first to know how stale the data is.           |
+| `28DaySubscription_Effective_<DATE>.zip` + unpacked dir | Source of last build; kept for auditability.                                                                      | Don't query directly.                               |
 
 If `CYCLE.txt` is missing, the cycle is the date in the
 `NASR_28DaySubscription_Effective_*` directory name. If both are
@@ -81,14 +81,14 @@ and troubleshooting in `references/refresh.md`.
 
 ## Decision tree — which store for which question
 
-| Question shape | Use |
-| --- | --- |
-| Airport / runway / navaid / fix / airway / ILS / tower / comms attributes only | `nasr.sqlite` |
-| "Near point X", "within Y miles", "closest to" | `spatialite_nasr.sqlite` + `mod_spatialite` |
-| Class B/C/D/E geometry & altitudes (interactive) | `controlled_airspace_spatialite.sqlite` |
-| SUA polygons & altitudes (interactive) | `special_use_airspace_spatialite.sqlite` |
-| NASR polygon × any external parquet (e.g. ADS-B) | DuckDB on the GeoParquet sidecar + the external parquet |
-| Bulk obstacle queries, wide aggregations over OBSTACLE | DuckDB on `obstacle.parquet` |
+| Question shape                                                                 | Use                                                     |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| Airport / runway / navaid / fix / airway / ILS / tower / comms attributes only | `nasr.sqlite`                                           |
+| "Near point X", "within Y miles", "closest to"                                 | `spatialite_nasr.sqlite` + `mod_spatialite`             |
+| Class B/C/D/E geometry & altitudes (interactive)                               | `controlled_airspace_spatialite.sqlite`                 |
+| SUA polygons & altitudes (interactive)                                         | `special_use_airspace_spatialite.sqlite`                |
+| NASR polygon × any external parquet (e.g. ADS-B)                               | DuckDB on the GeoParquet sidecar + the external parquet |
+| Bulk obstacle queries, wide aggregations over OBSTACLE                         | DuckDB on `obstacle.parquet`                            |
 
 Recipes for each row are in `references/cookbook.md`. Schema reference
 for the underlying tables is in `references/schema.md`.
@@ -110,7 +110,7 @@ The auto-detection prefers Homebrew's
 missing. Alternatives:
 
 - **Python**: `con.enable_load_extension(True);
-  con.load_extension(os.environ['MOD_SPATIALITE_PATH'])`.
+con.load_extension(os.environ['MOD_SPATIALITE_PATH'])`.
 - **DuckDB** (different SQL dialect, but reads `.sqlite` via the
   `sqlite_scanner` extension and can do spatial via its own `spatial`
   extension on the GeoParquet sidecars).
@@ -163,12 +163,11 @@ spatially join NASR airspace polygons against aircraft track points.
 deliberately leaves it unset by default; users who don't have an
 archive should ignore the rest of this section.
 
-Common ADS-B parquet schemas vary by tool. Two seen in the wild:
+Common ADS-B parquet schemas vary by tool.
 
-| Schema | Source | Key columns | Squawk type |
-| --- | --- | --- | --- |
+| Schema             | Source                        | Key columns                                                          | Squawk type        |
+| ------------------ | ----------------------------- | -------------------------------------------------------------------- | ------------------ |
 | airplanes.live raw | direct dump of /aircraft.json | `hex`, `flight`, `r`, `t`, `lat`, `lon`, `alt_baro`, `now`, `squawk` | VARCHAR (`'1200'`) |
-| adsbx2parquet output | jjwiseman/gnss-interference Rust tool | `icao24`, `callsign`, `registration`, `aircraft_type`, `latitude`, `longitude`, `baro_altitude`, `timestamp`, `squawk` | INTEGER (`1200`) |
 
 Pattern for any "aircraft inside / near a NASR polygon" query:
 
@@ -198,7 +197,7 @@ typically has no spatial index, so without it DuckDB scans every row
 group in the archive.
 
 **Temporal alignment.** NASR is a 28-day cycle. When querying historical
-ADS-B (>28 days old), the *current* NASR cycle may not match the
+ADS-B (>28 days old), the _current_ NASR cycle may not match the
 airspace that was in effect at the time. Note this in answers when the
 gap matters (airspace boundary changes, ILS frequency reassignments,
 runway closures). For interactive-era queries this is usually moot.
@@ -267,7 +266,7 @@ runway closures). For interactive-era queries this is usually moot.
 ## Pitfalls
 
 - **Don't conflate Mode-C veil with Class B.** The 30-NM Mode C ring is
-  *not* a Class_Airspace row — it's an FAR § 91.215 requirement, not
+  _not_ a Class_Airspace row — it's an FAR § 91.215 requirement, not
   airspace geometry. Aircraft at FL010 outside Bravo but inside the
   veil are Mode-C-required, not Bravo-clearance-required.
 - **NASR is the regulatory snapshot, not real-time.** No NOTAMs, no
