@@ -13,13 +13,6 @@ installed, the agent can:
 - Optionally join NASR polygons against an external ADS-B parquet
   archive for traffic-vs-airspace analyses
 
-The skill is reference material only — it doesn't ship the data. You
-build the four SQLite/SpatiaLite databases locally from the FAA's free
-NASR subscription using [jlmcgraw/processFaaData][upstream], then
-generate three GeoParquet sidecars with `ogr2ogr`.
-
-[upstream]: https://github.com/jlmcgraw/processFaaData
-
 ## Quick start
 
 Supported platforms: macOS (Apple Silicon or Intel), Debian/Ubuntu, WSL.
