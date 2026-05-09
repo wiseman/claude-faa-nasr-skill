@@ -1,0 +1,45 @@
+# claude-faa-nasr-skill — local configuration
+#
+# Copy this file to one of:
+#   - ./config.sh           (next to this skill's SKILL.md)
+#   - ${XDG_CONFIG_HOME:-$HOME/.config}/faa-nasr-skill/config.sh
+#
+# Or export the variables in your shell rc. Discovery order used by
+# scripts/load-config.sh:
+#
+#   1. Existing environment variable
+#   2. $FAA_NASR_CONFIG (if set, treated as a path to a config file)
+#   3. ./config.sh next to the skill
+#   4. $XDG_CONFIG_HOME/faa-nasr-skill/config.sh (or ~/.config/...)
+#   5. The defaults baked into load-config.sh
+#
+# All variables below are optional — the defaults shown in comments
+# are used if neither env nor file sets them.
+
+# Where the built NASR databases (.sqlite + .parquet + CYCLE.txt) live.
+# NASR_DATA_DIR="$HOME/data/faa/nasr"
+
+# Where the processFaaData build tool is cloned.
+# PROCESS_FAA_DATA_DIR="$HOME/src/processFaaData"
+
+# Optional: directory of ADS-B parquet files for cross-format joins.
+# Leave unset if you don't have an ADS-B archive — the relevant
+# cookbook recipes will be skipped.
+# ADSB_PARQUET_DIR="$HOME/data/adsb/parquet"
+
+# sqlite3 binary that supports `.load mod_spatialite`. Apple's stock
+# /usr/bin/sqlite3 does NOT — it's built with SQLITE_OMIT_LOAD_EXTENSION.
+# scripts/doctor.sh auto-detects on macOS arm64, macOS x86, and Linux,
+# but you can pin one here:
+# SQLITE_BIN="/opt/homebrew/opt/sqlite/bin/sqlite3"   # macOS arm64
+# SQLITE_BIN="/usr/local/opt/sqlite/bin/sqlite3"      # macOS x86
+# SQLITE_BIN="sqlite3"                                # Linux (PATH)
+
+# Full path to the mod_spatialite shared library. On macOS the
+# loader's search path doesn't include Homebrew's lib dir for sqlite
+# child processes, so a bare `mod_spatialite` won't resolve. Linux
+# loaders find it by bare name. doctor.sh auto-detects; pin here if
+# auto-detection fails:
+# MOD_SPATIALITE_PATH="/opt/homebrew/lib/mod_spatialite.dylib"     # macOS arm64
+# MOD_SPATIALITE_PATH="/usr/local/lib/mod_spatialite.dylib"        # macOS x86
+# MOD_SPATIALITE_PATH="mod_spatialite"                             # Linux

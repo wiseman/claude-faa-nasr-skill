@@ -1,0 +1,8 @@
+.DS_Store
+*.swp
+*.bak
+__pycache__/
+*.pyc
+
+# user's local config override (template: config.sh.example)
+config.sh
