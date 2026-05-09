@@ -111,7 +111,7 @@ install_prereqs_macos() {
 }
 
 install_prereqs_debian() {
-  local apt_pkgs=(git perl cpanminus sqlite3 libsqlite3-mod-spatialite spatialite-bin gdal-bin python3-gdal wget unzip ca-certificates)
+  local apt_pkgs=(git build-essential perl cpanminus sqlite3 libsqlite3-mod-spatialite spatialite-bin gdal-bin python3-gdal wget unzip ca-certificates)
   # Note: Ubuntu/Debian gdal-bin lacks the Parquet driver. We install
   # uv below so refresh.sh can use scripts/build-parquet-sidecars.py
   # as a fallback.
